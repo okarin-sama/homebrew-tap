@@ -15,13 +15,24 @@ jobs:
       - name: brew style
         run: brew style Formula/worklog.rb
 
-      # The formula's source is the tarball vendored in dist/ (file:// URL),
-      # so a fresh clone has everything it needs — no GitHub auth in CI.
-      - name: Install formula from file
-        run: brew install ./Formula/worklog.rb
+      # brew refuses formula files outside a tap, so stage this checkout as the
+      # real tap locally (the formula's file:// source is the tarball vendored
+      # in dist/ — everything a user gets after `brew tap` is reproduced).
+      - name: Stage this checkout as okarin-sama/homebrew-tap
+        run: |
+          TAPDIR="$(brew --repository)/Library/Taps/okarin-sama/homebrew-tap"
+          mkdir -p "$TAPDIR"
+          cp -R Formula dist "$TAPDIR/"
+          git -C "$TAPDIR" init -q
+          git -C "$TAPDIR" add -A
+          git -C "$TAPDIR" -c user.name=ci -c user.email=ci@localhost commit -qm staged
+          brew trust okarin-sama/tap
+
+      - name: Install from the staged tap
+        run: brew install okarin-sama/tap/worklog
 
       - name: Formula test block (--help x3, needs no twg)
-        run: brew test worklog
+        run: brew test okarin-sama/tap/worklog
 
       - name: Smoke the installed commands
         run: |
