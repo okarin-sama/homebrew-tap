@@ -1,13 +1,14 @@
 class Worklog < Formula
   desc "One-file worklog driver: Jira time logging + OpenProject sync"
   homepage "https://github.com/okarin-sama/worklog"
-  url "https://github.com/okarin-sama/worklog/releases/download/v1.0.0/worklog-1.0.0.tar.gz"
+  # The source repo is PRIVATE and Homebrew refuses to use your git/API
+  # credentials for formula downloads — so the release tarball is vendored in
+  # this tap under dist/ (brew already authenticates the tap clone with your
+  # gh/git setup). On every release: rebuild the tarball, drop it in dist/,
+  # update url/sha256 below. See CONTRIBUTING.md in the source repo.
+  url "file://#{File.expand_path('../dist/worklog-1.0.0.tar.gz', __FILE__)}"
+  version "1.0.0"
   sha256 "ef0bbd40278a44ca0ad67000cbe8f0ebee46cdcb5c3bbbe29ad7e6542371ba75"
-  # Private repo: brew needs a GitHub token for the tarball download —
-  #   export HOMEBREW_GITHUB_API_TOKEN=$(gh auth token)
-  # or install from head, which clones over the git credentials you already have:
-  #   brew install --head worklog
-  head "https://github.com/okarin-sama/worklog.git", branch: "main"
   # internal tooling: no SPDX license (see LICENSE = all-rights-reserved)
 
   depends_on "jq" # curl is part of macOS; the scripts run on stock bash 3.2+
