@@ -6,9 +6,9 @@ class Worklog < Formula
   # this tap under dist/ (brew already authenticates the tap clone with your
   # gh/git setup). On every release: rebuild the tarball, drop it in dist/,
   # update url/sha256 below. See CONTRIBUTING.md in the source repo.
-  url "file://#{File.expand_path('../dist/worklog-1.0.0.tar.gz', __dir__)}"
-  version "1.0.0"
-  sha256 "ef0bbd40278a44ca0ad67000cbe8f0ebee46cdcb5c3bbbe29ad7e6542371ba75"
+  url "file://#{File.expand_path('../dist/worklog-1.0.1.tar.gz', __dir__)}"
+  version "1.0.1"
+  sha256 "8f9cb818068d9ebb5485bed0de14f1fa28205be45e0d094388e8f7647d0a0fde"
   # internal tooling: no SPDX license (see LICENSE = all-rights-reserved)
 
   depends_on "jq" # curl is part of macOS; the scripts run on stock bash 3.2+
