@@ -1,8 +1,8 @@
 class Worklog < Formula
   desc "One-file worklog driver: Jira time logging + OpenProject sync"
   homepage "https://github.com/okarin-sama/worklog"
-  url "https://github.com/okarin-sama/worklog/archive/refs/tags/v1.2.0.tar.gz"
-  sha256 "affc439e7557b745ccca73d606768d5c6f555587259bd200275d6a84e13cb170"
+  url "https://github.com/okarin-sama/worklog/archive/refs/tags/v1.2.1.tar.gz"
+  sha256 "ceb53815ade319b2baa7e481119a3fd079c3faef1593fd262c62e6c4bdc0be04"
   license "MIT"
 
   depends_on "jq" # curl is part of macOS; the scripts run on stock bash 3.2+
