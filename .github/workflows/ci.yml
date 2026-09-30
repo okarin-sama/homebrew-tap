@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  formula:
+    name: brew style + install + test
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: brew style
+        run: brew style Formula/worklog.rb
+
+      # The formula's source is the tarball vendored in dist/ (file:// URL),
+      # so a fresh clone has everything it needs — no GitHub auth in CI.
+      - name: Install formula from file
+        run: brew install ./Formula/worklog.rb
+
+      - name: Formula test block (--help x3, needs no twg)
+        run: brew test worklog
+
+      - name: Smoke the installed commands
+        run: |
+          printf 'DEMO-421 1h Today op:65:Support #data architecture\n' > "$RUNNER_TEMP/entries"
+          export WORKLOG_ENTRIES="$RUNNER_TEMP/entries"
+          worklog-run --print-map | grep -Eq '^DEMO-421[[:space:]]+65[[:space:]]+Support'
+          worklog-run --jira-only --dry-run | grep -q 'Planned worklogs (1 entries)'
+          worklog-add --help >/dev/null && op-sync --help >/dev/null && worklog-summary --help >/dev/null
