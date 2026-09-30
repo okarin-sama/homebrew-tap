@@ -7,7 +7,7 @@ on:
 
 jobs:
   formula:
-    name: brew style + install + test
+    name: brew style + audit + install + test
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -15,19 +15,20 @@ jobs:
       - name: brew style
         run: brew style Formula/worklog.rb
 
-      # brew refuses formula files outside a tap, so stage this checkout as the
-      # real tap locally (the formula's file:// source is the tarball vendored
-      # in dist/ — everything a user gets after `brew tap` is reproduced).
-      - name: Stage this checkout as okarin-sama/homebrew-tap
+      - name: brew audit --strict
         run: |
           TAPDIR="$(brew --repository)/Library/Taps/okarin-sama/homebrew-tap"
           mkdir -p "$TAPDIR"
-          cp -R Formula dist "$TAPDIR/"
+          cp -R Formula "$TAPDIR/"
           git -C "$TAPDIR" init -q
           git -C "$TAPDIR" add -A
           git -C "$TAPDIR" -c user.name=ci -c user.email=ci@localhost commit -qm staged
           brew trust okarin-sama/tap
+          brew audit --strict okarin-sama/tap/worklog
 
+      # The formula installs from the source repo's public tag archive, so CI
+      # needs both repos public — an unauthenticated fetch is exactly what a
+      # user's `brew install` does.
       - name: Install from the staged tap
         run: brew install okarin-sama/tap/worklog
 

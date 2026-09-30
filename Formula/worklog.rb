@@ -1,15 +1,9 @@
 class Worklog < Formula
   desc "One-file worklog driver: Jira time logging + OpenProject sync"
   homepage "https://github.com/okarin-sama/worklog"
-  # The source repo is PRIVATE and Homebrew refuses to use your git/API
-  # credentials for formula downloads — so the release tarball is vendored in
-  # this tap under dist/ (brew already authenticates the tap clone with your
-  # gh/git setup). On every release: rebuild the tarball, drop it in dist/,
-  # update url/sha256 below. See CONTRIBUTING.md in the source repo.
-  url "file://#{File.expand_path("../dist/worklog-1.0.2.tar.gz", __dir__)}"
-  version "1.0.2"
-  sha256 "c43bc10686e720c92b399038e0628ab714e1745b4e551dde931984b0a5813357"
-  # internal tooling: no SPDX license (see LICENSE = all-rights-reserved)
+  url "https://github.com/okarin-sama/worklog/archive/refs/tags/v1.0.3.tar.gz"
+  sha256 "917fea3bada7612824a45f990640b694157cd6ef4dc25d236cd2acd1b80313b1"
+  license "MIT"
 
   depends_on "jq" # curl is part of macOS; the scripts run on stock bash 3.2+
 
@@ -25,15 +19,18 @@ class Worklog < Formula
 
   def caveats
     <<~EOS
-      Requires the internal `twg` CLI on PATH (or ~/.local/bin/twg). It is not a
-      public package — install it the way your team distributes it.
+      Jira reads and writes go through Atlassian's TWG CLI, which is public but
+      not a Homebrew package:
+        curl -fsSL --retry 2 https://teamwork-graph.atlassian.com/cli/install | bash
+        twg login && twg setup && twg doctor
+      See https://developer.atlassian.com/cloud/twg-cli/getting-started/installation/
 
       Keep ONE maintained entries file, anywhere, e.g.:
         mkdir -p ~/.config/worklog
         cp #{pkgshare}/entries.example ~/.config/worklog/entries   # start from the sample
         export WORKLOG_ENTRIES=~/.config/worklog/entries           # optional; default search:
                                                                    # $WORKLOG_ENTRIES > ./entries > ~/.config/worklog/entries
-        export OP_BASE_URL=https://op.example.com
+        export OP_BASE_URL=https://your-openproject-instance.example
         export OP_TOKEN=...            # OP personal token, scope: Time & costs
 
       Then from any directory:
