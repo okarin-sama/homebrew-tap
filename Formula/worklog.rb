@@ -1,5 +1,5 @@
 class Worklog < Formula
-  desc "One-file worklog driver: batch-logs time to Jira and syncs mapped items to OpenProject"
+  desc "One-file worklog driver: Jira time logging + OpenProject sync"
   homepage "https://github.com/okarin-sama/worklog"
   url "https://github.com/okarin-sama/worklog/archive/refs/tags/v1.0.0.tar.gz"
   sha256 "ef0bbd40278a44ca0ad67000cbe8f0ebee46cdcb5c3bbbe29ad7e6542371ba75"
@@ -10,7 +10,7 @@ class Worklog < Formula
   head "https://github.com/okarin-sama/worklog.git", branch: "main"
   # internal tooling: no SPDX license (see LICENSE = all-rights-reserved)
 
-  depends_on "jq"   # curl is part of macOS; the scripts run on stock bash 3.2+
+  depends_on "jq" # curl is part of macOS; the scripts run on stock bash 3.2+
 
   def install
     # GitHub archive tarballs extract into worklog-<version>/; Homebrew cds into
