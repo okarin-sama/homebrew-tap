@@ -1,7 +1,7 @@
 class Worklog < Formula
   desc "One-file worklog driver: Jira time logging + OpenProject sync"
   homepage "https://github.com/okarin-sama/worklog"
-  url "https://github.com/okarin-sama/worklog/archive/refs/tags/v1.0.0.tar.gz"
+  url "https://github.com/okarin-sama/worklog/releases/download/v1.0.0/worklog-1.0.0.tar.gz"
   sha256 "ef0bbd40278a44ca0ad67000cbe8f0ebee46cdcb5c3bbbe29ad7e6542371ba75"
   # Private repo: brew needs a GitHub token for the tarball download —
   #   export HOMEBREW_GITHUB_API_TOKEN=$(gh auth token)
